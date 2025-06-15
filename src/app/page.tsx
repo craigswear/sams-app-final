@@ -1,55 +1,54 @@
 'use client';
-import { BarChart, BookCheck, ShieldCheck } from 'lucide-react';
-import { LoginForm } from '@/components/auth/LoginForm';
-import Image from 'next/image';
-import styles from './page.module.css';
 
-export default function HomePage() {
-  return (
-    <div className={styles.pageContainer}>
-      <div className={styles.contentWrapper}>
-        <header className={styles.header}>
-          <div className={styles.logoContainer}>
-            <Image src="/logo.png" alt="SAMS Logo" width={50} height={50}/>
-            <div>
-                <h1 className={styles.logoTitle}>SAMS</h1>
-                <p className={styles.logoTagline}>The Standard in Educational Solutions</p>
-            </div>
-          </div>
-        </header>
-        <main className={styles.mainContent}>
-          <div className={styles.infoSide}>
-            <h2 className={styles.title}>Accommodation Management, Reimagined.</h2>
-            <p className={styles.description}>The all-in-one platform for compliance, tracking, and data-driven insights.</p>
-            <div className={styles.featuresGrid}>
-              <div className={styles.feature}>
-                <div className={styles.featureIconContainer}><BookCheck className={styles.featureIcon} /></div>
-                <div>
-                    <h3 className={styles.featureTitle}>For Teachers & Admins</h3>
-                    <p className={styles.featureDescription}>Acknowledge, track, and document accommodations.</p>
-                </div>
-              </div>
-              <div className={styles.feature}>
-                <div className={styles.featureIconContainer}><BarChart className={styles.featureIcon} /></div>
-                <div>
-                    <h3 className={styles.featureTitle}>Compliance & Reporting</h3>
-                    <p className={styles.featureDescription}>Oversee compliance and manage school-wide data.</p>
-                </div>
-              </div>
-              <div className={styles.feature}>
-                <div className={styles.featureIconContainer}><ShieldCheck className={styles.featureIcon} /></div>
-                <div>
-                    <h3 className={styles.featureTitle}>Secure & Compliant</h3>
-                    <p className={styles.featureDescription}>Built with security in mind to protect student data.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className={styles.formSide}>
-            <LoginForm />
-          </div>
-        </main>
+import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+
+export default function DashboardPage() {
+  // We now need the userProfile to check their role
+  const { user, userProfile, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading) {
+      // First, check if the user is logged in at all. If not, send to login page.
+      if (!user) {
+        router.push('/');
+      } 
+      // If the user profile is loaded and their role is 'admin', redirect to the admin page.
+      else if (userProfile?.role === 'admin') {
+        router.push('/dashboard/admin');
+      }
+    }
+  }, [user, userProfile, loading, router]);
+
+  // Show a loading screen while we determine where to send the user
+  if (loading || (user && !userProfile) || userProfile?.role === 'admin') {
+    return (
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+          backgroundColor: '#111827',
+          color: 'white',
+          fontSize: '1.5rem'
+        }}>
+            Loading Dashboard...
+        </div>
+    );
+  }
+
+  // If the user is a teacher, they will stay on this page and see the overview.
+  if (user && userProfile?.role === 'teacher') {
+    return (
+      <div>
+        <h1 style={{fontSize: '2rem', fontWeight: 'bold', marginBottom: '1rem'}}>Dashboard Overview</h1>
+        <p>Welcome, {user.email}. This is the main dashboard where you can get an overview of your classes and pending tasks.</p>
       </div>
-    </div>
-  );
+    );
+  }
+
+  // Fallback for any other state
+  return null;
 }
