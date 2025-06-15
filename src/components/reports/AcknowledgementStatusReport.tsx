@@ -4,10 +4,20 @@ import { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { firestore as db } from '@/lib/firebase';
 import { Student, UserProfile, TeacherClass } from '@/types';
-import styles from '@/app/dashboard/admin/reports/page.module.css'; // Reuse styles
+import styles from '@/app/dashboard/admin/reports/page.module.css';
+
+// Define a specific type for our report data rows
+interface ReportRow {
+    id: string;
+    teacherName: string;
+    className: string;
+    studentName: string;
+    status: 'Acknowledged' | 'Pending';
+}
 
 export function AcknowledgementStatusReport() {
-    const [reportData, setReportData] = useState<any[]>([]);
+    // Use the new ReportRow type for our state
+    const [reportData, setReportData] = useState<ReportRow[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -22,9 +32,9 @@ export function AcknowledgementStatusReport() {
 
             const studentsMap = new Map(studentsSnap.docs.map(doc => [doc.id, doc.data() as Omit<Student, 'id'>]));
             const teachersMap = new Map(usersSnap.docs.map(doc => [doc.id, doc.data() as UserProfile]));
-            const acksSet = new Set(acksSnap.docs.map(doc => doc.id)); // Use a Set for fast lookups
+            const acksSet = new Set(acksSnap.docs.map(doc => doc.id));
 
-            const data: any[] = [];
+            const data: ReportRow[] = [];
             classesSnap.docs.forEach(classDoc => {
                 const classData = classDoc.data() as TeacherClass;
                 const teacher = teachersMap.get(classData.teacherId);
