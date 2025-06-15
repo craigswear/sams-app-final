@@ -1,0 +1,77 @@
+/* src/app/dashboard/admin/reports/page.module.css */
+.pageHeader {
+    margin-bottom: 2rem;
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: #9ca3af;
+}
+
+.tableContainer {
+    background-color: #1f2937;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    border: 1px solid #374151;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    padding: 1rem 1.5rem;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.table th {
+    background-color: #374151;
+    font-weight: 600;
+    color: #e5e7eb;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+.table tr {
+    border-bottom: 1px solid #374151;
+}
+
+.table tr:last-child {
+    border-bottom: none;
+}
+
+.table td {
+    color: #d1d5db;
+}
+
+.effectivenessCell {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.effectivenessDot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.dotLow { background-color: #ef4444; } /* red-500 */
+.dotMedium { background-color: #f59e0b; } /* amber-500 */
+.dotHigh { background-color: #22c55e; } /* green-500 */
+
+.loading, .error {
+    text-align: center;
+    padding: 4rem;
+    font-size: 1.25rem;
+    color: #9ca3af;
+}
