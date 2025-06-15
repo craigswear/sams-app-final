@@ -1,20 +1,109 @@
-.pageContainer { min-height: 100vh; font-family: 'Poppins', sans-serif; color: #ffffff; background: linear-gradient(to bottom right, #111827, #1f2937); }
-.contentWrapper { max-width: 1280px; margin: 0 auto; padding: 2rem 1.5rem; }
-.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4rem; }
-.logoContainer { display: flex; align-items: center; gap: 1rem; }
-.logoTitle { font-size: 1.75rem; font-weight: 700; }
-.mainContent { display: grid; grid-template-columns: 1fr; gap: 4rem; align-items: center; }
-@media (min-width: 768px) { .mainContent { grid-template-columns: 1fr 1fr; } }
-.infoSide { text-align: center; }
-@media (min-width: 768px) { .infoSide { text-align: left; } }
-.title { font-size: 2.25rem; font-weight: 700; margin-bottom: 1rem; }
-@media (min-width: 768px) { .title { font-size: 2.75rem; } }
-.description { font-size: 1.125rem; color: #d1d5db; max-width: 42rem; margin: 0 auto 2.5rem auto; }
-@media (min-width: 768px) { .description { margin-left: 0; } }
-.featuresGrid { display: flex; flex-direction: column; gap: 1.5rem; }
-.feature { display: flex; align-items: flex-start; gap: 1rem; }
-.featureIconContainer { flex-shrink: 0; background-color: #1f2937; padding: 0.75rem; border-radius: 0.5rem; }
-.featureIcon { width: 1.5rem; height: 1.5rem; color: #818cf8; }
-.featureTitle { font-weight: 600; font-size: 1.25rem; color: #ffffff; }
-.featureDescription { color: #9ca3af; }
-.formSide { width: 100%; max-width: 28rem; margin: 0 auto; }
+.pageContainer {
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    color: #ffffff;
+    background: linear-gradient(to bottom right, #111827, #1f2937);
+}
+.contentWrapper {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(79, 70, 229, 0.2); /* Faint border */
+}
+.logoContainer {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.logoTitle {
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+.logoTagline {
+    font-size: 0.8rem;
+    color: #d1d5db;
+    font-weight: 400;
+    margin-top: -2px;
+}
+.mainContent {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+@media (min-width: 768px) {
+    .mainContent {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+.infoSide {
+    text-align: center;
+}
+@media (min-width: 768px) {
+    .infoSide {
+        text-align: left;
+    }
+}
+.title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+@media (min-width: 768px) {
+    .title {
+        font-size: 2.75rem;
+    }
+}
+.description {
+    font-size: 1.125rem;
+    color: #d1d5db;
+    max-width: 42rem;
+    margin: 0 auto 2.5rem auto;
+}
+@media (min-width: 768px) {
+    .description {
+        margin-left: 0;
+    }
+}
+.featuresGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+.feature {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+.featureIconContainer {
+    flex-shrink: 0;
+    background-color: #1f2937;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+}
+.featureIcon {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: #818cf8;
+}
+.featureTitle {
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: #ffffff;
+}
+.featureDescription {
+    color: #9ca3af;
+}
+.formSide {
+    width: 100%;
+    max-width: 28rem;
+    margin: 0 auto;
+}
