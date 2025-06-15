@@ -1,25 +1,27 @@
 'use client';
 import { useEffect, useState, useCallback } from 'react';
-import { collection, getDocs, QueryDocumentSnapshot, DocumentData } from 'firebase/firestore';
+import { collection, getDocs, doc, deleteDoc, QueryDocumentSnapshot, DocumentData } from 'firebase/firestore';
 import { firestore as db } from '@/lib/firebase';
 import { useAuth } from '@/context/AuthContext';
 import { Student } from '@/types';
 import styles from './page.module.css';
 import { AddStudentModal } from '@/components/modals/AddStudentModal';
-import { PlusCircle } from 'lucide-react';
+import { EditStudentModal } from '@/components/modals/EditStudentModal'; // Import Edit modal
+import { PlusCircle, Edit, Trash2 } from 'lucide-react';
 
 export default function AllStudentsPage() {
     const { user, userProfile } = useAuth();
     const [students, setStudents] = useState<Student[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isAddModalOpen, setAddModalOpen] = useState(false);
+    const [isEditModalOpen, setEditModalOpen] = useState(false);
+    const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
 
     const fetchStudents = useCallback(async () => {
         setLoading(true);
         try {
-            const studentsCollectionRef = collection(db, 'students');
-            const querySnapshot = await getDocs(studentsCollectionRef);
+            const querySnapshot = await getDocs(collection(db, 'students'));
             const studentsList = querySnapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => ({ id: doc.id, ...doc.data() } as Student));
             setStudents(studentsList);
         } catch (err) {
@@ -36,16 +38,30 @@ export default function AllStudentsPage() {
         }
     }, [user, fetchStudents]);
 
+    const handleEdit = (student: Student) => {
+        setSelectedStudent(student);
+        setEditModalOpen(true);
+    };
+
+    const handleDelete = async (studentId: string) => {
+        if (window.confirm("Are you sure you want to delete this student? This action cannot be undone.")) {
+            try {
+                await deleteDoc(doc(db, "students", studentId));
+                fetchStudents(); // Refresh list
+            } catch (error) {
+                console.error("Error deleting student: ", error);
+            }
+        }
+    };
+
     if (loading) return <div className={styles.loading}>Loading students...</div>;
     if (error) return <div className={styles.error}>{error}</div>;
 
     return (
         <>
-            <AddStudentModal 
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                onStudentAdded={fetchStudents}
-            />
+            <AddStudentModal isOpen={isAddModalOpen} onClose={() => setAddModalOpen(false)} onStudentAdded={fetchStudents} />
+            <EditStudentModal isOpen={isEditModalOpen} onClose={() => setEditModalOpen(false)} onStudentUpdated={fetchStudents} student={selectedStudent} />
+            
             <div>
                 <header className={styles.pageHeader} style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                     <div>
@@ -53,7 +69,7 @@ export default function AllStudentsPage() {
                         <p className={styles.subtitle}>A master list of all students registered in the system.</p>
                     </div>
                     {userProfile?.role === 'admin' && (
-                        <button onClick={() => setIsModalOpen(true)} className={styles.addButton} style={{backgroundColor: '#4f46e5', color: 'white', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', fontWeight: 600, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem'}}>
+                        <button onClick={() => setAddModalOpen(true)} style={{backgroundColor: '#4f46e5', color: 'white', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', fontWeight: 600, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem'}}>
                             <PlusCircle size={20} />
                             Add Student
                         </button>
@@ -66,6 +82,7 @@ export default function AllStudentsPage() {
                                 <th>Name</th>
                                 <th>Student ID</th>
                                 <th>Accommodations</th>
+                                {userProfile?.role === 'admin' && <th>Actions</th>}
                             </tr>
                         </thead>
                         <tbody>
@@ -76,14 +93,16 @@ export default function AllStudentsPage() {
                                     <td>
                                         {student.accommodations.length > 0 ? (
                                             student.accommodations.map((acc) => (
-                                                <span key={acc.id} className={styles.accommodationTag}>
-                                                    {acc.name}
-                                                </span>
+                                                <span key={acc.id} className={styles.accommodationTag}>{acc.name}</span>
                                             ))
-                                        ) : (
-                                            <span>No accommodations listed.</span>
-                                        )}
+                                        ) : (<span>None</span>)}
                                     </td>
+                                    {userProfile?.role === 'admin' && (
+                                        <td className={styles.actionsCell}>
+                                            <button onClick={() => handleEdit(student)} className={styles.actionButton}><Edit size={14}/></button>
+                                            <button onClick={() => handleDelete(student.id)} className={`${styles.actionButton} ${styles.deleteButton}`}><Trash2 size={14}/></button>
+                                        </td>
+                                    )}
                                 </tr>
                             ))}
                         </tbody>

@@ -56,13 +56,6 @@
     font-size: 0.875rem;
 }
 
-.loading, .error {
-    text-align: center;
-    padding: 4rem;
-    font-size: 1.25rem;
-    color: #9ca3af;
-}
-
 .accommodationActions {
     display: flex;
     gap: 0.5rem;
@@ -85,4 +78,11 @@
 .deleteButton:hover {
     border-color: #ef4444;
     color: #ef4444;
+}
+
+.loading, .error {
+    text-align: center;
+    padding: 4rem;
+    font-size: 1.25rem;
+    color: #9ca3af;
 }

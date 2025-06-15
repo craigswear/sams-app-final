@@ -1,13 +1,15 @@
 'use client';
+
 import { useEffect, useState, useCallback } from 'react';
-import { collection, getDocs, QueryDocumentSnapshot, DocumentData } from 'firebase/firestore';
+import { collection, getDocs, doc, deleteDoc, QueryDocumentSnapshot, DocumentData } from 'firebase/firestore';
 import { firestore as db } from '@/lib/firebase';
 import { useAuth } from '@/context/AuthContext';
 import { UserProfile } from '@/types';
 import styles from './page.module.css';
 import { useRouter } from 'next/navigation';
-import { PlusCircle } from 'lucide-react';
+import { PlusCircle, Edit, Trash2 } from 'lucide-react';
 import { CreateUserModal } from '@/components/modals/CreateUserModal';
+import EditUserModal from '@/components/modals/EditUserModal'; // Corrected: Use default import
 
 export default function UserManagementPage() {
     const { userProfile } = useAuth();
@@ -15,13 +17,13 @@ export default function UserManagementPage() {
     const [users, setUsers] = useState<UserProfile[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isAddModalOpen, setAddModalOpen] = useState(false);
+    const [isEditModalOpen, setEditModalOpen] = useState(false);
+    const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null);
 
     const fetchUsers = useCallback(async () => {
-        if (userProfile?.role !== 'admin') {
-            setLoading(false);
-            return;
-        }
+        if (userProfile?.role !== 'admin') { setLoading(false); return; };
+        setLoading(true);
         try {
             const usersCollectionRef = collection(db, 'users');
             const querySnapshot = await getDocs(usersCollectionRef);
@@ -43,23 +45,42 @@ export default function UserManagementPage() {
         }
     }, [userProfile, router, fetchUsers]);
 
+    const handleEdit = (user: UserProfile) => {
+        setSelectedUser(user);
+        setEditModalOpen(true);
+    };
+
+    const handleDelete = async (uid: string) => {
+        if (window.confirm("Are you sure you want to delete this user's profile? This does not remove their login credentials.")) {
+            try {
+                await deleteDoc(doc(db, "users", uid));
+                fetchUsers(); // Refresh list
+            } catch (error) {
+                console.error("Error deleting user profile: ", error);
+            }
+        }
+    };
+
     if (loading) return <div className={styles.loading}>Loading users...</div>;
     if (error) return <div className={styles.error}>{error}</div>;
 
     return (
         <>
-            <CreateUserModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onUserCreated={fetchUsers} />
+            <CreateUserModal isOpen={isAddModalOpen} onClose={() => setAddModalOpen(false)} onUserCreated={fetchUsers} />
+            <EditUserModal isOpen={isEditModalOpen} onClose={() => setEditModalOpen(false)} onUserUpdated={fetchUsers} user={selectedUser} />
+            
             <div>
-                <header className={styles.pageHeader} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <header className={styles.pageHeader} style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                     <div>
                         <h1 className={styles.title}>User Management</h1>
                         <p className={styles.subtitle}>View and manage all users in the system.</p>
                     </div>
-                    <button onClick={() => setIsModalOpen(true)} className={styles.createButton}>
+                    <button onClick={() => setAddModalOpen(true)} className={styles.createButton}>
                         <PlusCircle size={20} />
                         Create User
                     </button>
                 </header>
+
                 <div className={styles.tableContainer}>
                     <table className={styles.table}>
                         <thead>
@@ -67,6 +88,7 @@ export default function UserManagementPage() {
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Role</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -78,6 +100,10 @@ export default function UserManagementPage() {
                                         <span className={`${styles.roleTag} ${user.role === 'admin' ? styles.roleAdmin : styles.roleTeacher}`}>
                                             {user.role}
                                         </span>
+                                    </td>
+                                    <td className={styles.actionsCell}>
+                                        <button onClick={() => handleEdit(user)} className={styles.actionButton}><Edit size={14}/></button>
+                                        <button onClick={() => handleDelete(user.uid)} className={`${styles.actionButton} ${styles.deleteButton}`}><Trash2 size={14}/></button>
                                     </td>
                                 </tr>
                             ))}
