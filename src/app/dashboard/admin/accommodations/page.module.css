@@ -62,3 +62,27 @@
     font-size: 1.25rem;
     color: #9ca3af;
 }
+
+.accommodationActions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.actionButton {
+    background-color: transparent;
+    border: 1px solid #4b5563; /* gray-600 */
+    color: #9ca3af;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.actionButton:hover {
+    border-color: #6366f1;
+    color: #6366f1;
+}
+.deleteButton:hover {
+    border-color: #ef4444;
+    color: #ef4444;
+}

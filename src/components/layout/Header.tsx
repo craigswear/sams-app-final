@@ -1,21 +1,16 @@
 'use client';
-import { auth } from '@/lib/firebase';
-import { signOut } from 'firebase/auth';
-import { useRouter } from 'next/navigation';
+
+import { useAuth } from '@/context/AuthContext';
 import styles from './Header.module.css';
+
 export function Header() {
-    const router = useRouter();
-    const handleLogout = async () => {
-        try {
-            await signOut(auth);
-            router.push('/');
-        } catch (error) {
-            console.error('Error signing out: ', error);
-        }
-    };
+    const { logout } = useAuth();
+
     return (
         <header className={styles.header}>
-            <button onClick={handleLogout} className={styles.logoutButton}>Logout</button>
+            <button onClick={logout} className={styles.logoutButton}>
+                Logout
+            </button>
         </header>
     );
 }
