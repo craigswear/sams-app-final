@@ -1,13 +1,14 @@
 'use client';
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { doc, getDoc, setDoc, Timestamp } from 'firebase/firestore'; 
+import { doc, getDoc, setDoc, Timestamp } from 'firebase/firestore';
 import { firestore as db } from '@/lib/firebase';
 import { useAuth } from '@/context/AuthContext';
 import { Student, Accommodation } from '@/types';
 import styles from './page.module.css';
 import Link from 'next/link';
 import { LogAccommodationModal } from '@/components/modals/LogAccommodationModal';
+
 function StudentDetailContent() {
     const { user } = useAuth();
     const searchParams = useSearchParams();
@@ -19,6 +20,7 @@ function StudentDetailContent() {
     const [isAcknowledged, setIsAcknowledged] = useState(false);
     const [isLogModalOpen, setIsLogModalOpen] = useState(false);
     const [selectedAccommodation, setSelectedAccommodation] = useState<Accommodation | null>(null);
+
     useEffect(() => {
         if (user && studentId) {
             const fetchStudentDetails = async () => {
@@ -31,11 +33,17 @@ function StudentDetailContent() {
                     const ackDocRef = doc(db, 'acknowledgements', `${user.uid}_${studentId}`);
                     const ackDocSnap = await getDoc(ackDocRef);
                     if (ackDocSnap.exists()) { setIsAcknowledged(true); }
-                } catch (err) { setError("Failed to load student details."); } finally { setLoading(false); }
+                } catch (err) {
+                    console.error("Failed to load student details:", err);
+                    setError("Failed to load student details.");
+                } finally {
+                    setLoading(false);
+                }
             };
             fetchStudentDetails();
         }
     }, [user, studentId]);
+
     const handleAcknowledge = async () => {
         if (!user || !student) return;
         try {
@@ -44,13 +52,16 @@ function StudentDetailContent() {
             setIsAcknowledged(true);
         } catch (error) { console.error("Error saving acknowledgement: ", error); }
     };
+
     const openLogModal = (accommodation: Accommodation) => {
         setSelectedAccommodation(accommodation);
         setIsLogModalOpen(true);
     };
+
     if (loading) return <div className={styles.loading}>Loading Student Details...</div>;
     if (error) return <div className={styles.error}>{error}</div>;
     if (!student) return <div className={styles.error}>Student not found.</div>;
+
     return (
         <>
             {selectedAccommodation && (<LogAccommodationModal isOpen={isLogModalOpen} onClose={() => setIsLogModalOpen(false)} student={student} accommodation={selectedAccommodation} />)}
@@ -67,7 +78,10 @@ function StudentDetailContent() {
                         {student.accommodations.length > 0 ? (
                             student.accommodations.map(acc => (
                                 <div key={acc.id} className={styles.accommodationItem}>
-                                    <div className={styles.accommodationHeader}><p className={styles.accommodationName}>{acc.name}</p><button onClick={() => openLogModal(acc)} className={styles.logButton}>Log</button></div>
+                                    <div className={styles.accommodationHeader}>
+                                        <p className={styles.accommodationName}>{acc.name}</p>
+                                        <button onClick={() => openLogModal(acc)} className={styles.logButton}>Log</button>
+                                    </div>
                                     <p className={styles.accommodationDesc}>{acc.description}</p>
                                 </div>
                             ))
@@ -83,6 +97,7 @@ function StudentDetailContent() {
         </>
     );
 }
+
 export default function StudentDetailPage() {
     return (
         <Suspense fallback={<div className={styles.loading}>Loading...</div>}>

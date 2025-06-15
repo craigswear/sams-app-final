@@ -1,12 +1,13 @@
 'use client';
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { doc, getDoc, collection, query, where, getDocs, documentId } from 'firebase/firestore'; 
+import { doc, getDoc, collection, query, where, getDocs, documentId } from 'firebase/firestore';
 import { firestore as db } from '@/lib/firebase';
 import { useAuth } from '@/context/AuthContext';
 import { TeacherClass, Student } from '@/types';
 import styles from './page.module.css';
 import Link from 'next/link';
+
 function ClassDetailContent() {
     const { user } = useAuth();
     const searchParams = useSearchParams();
@@ -15,6 +16,7 @@ function ClassDetailContent() {
     const [roster, setRoster] = useState<Student[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+
     useEffect(() => {
         if (user && classId) {
             const fetchClassAndRoster = async () => {
@@ -36,6 +38,7 @@ function ClassDetailContent() {
                         }
                     }
                 } catch (err) {
+                    console.error("Error fetching class details:", err);
                     setError("Failed to load class data.");
                 } finally {
                     setLoading(false);
@@ -47,8 +50,10 @@ function ClassDetailContent() {
             setLoading(false);
         }
     }, [user, classId]);
+
     if (loading) return <div className={styles.loading}>Loading Class Roster...</div>;
     if (error) return <div className={styles.error}>{error}</div>;
+
     return (
         <div>
             <header className={styles.pageHeader}>
@@ -91,6 +96,7 @@ function ClassDetailContent() {
         </div>
     );
 }
+
 export default function ClassDetailPage() {
     return (
         <Suspense fallback={<div className={styles.loading}>Loading...</div>}>
