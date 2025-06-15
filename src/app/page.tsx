@@ -1,95 +1,31 @@
-import Image from "next/image";
-import styles from "./page.module.css";
-
-export default function Home() {
+'use client';
+import { BarChart, BookCheck, ShieldCheck } from 'lucide-react';
+import { LoginForm } from '@/components/auth/LoginForm';
+import Image from 'next/image';
+import styles from './page.module.css';
+export default function HomePage() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+    <div className={styles.pageContainer}>
+      <div className={styles.contentWrapper}>
+        <header className={styles.header}>
+          <div className={styles.logoContainer}>
+            <Image src="/logo.png" alt="SAMS Logo" width={50} height={50}/>
+            <h1 className={styles.logoTitle}>SAMS</h1>
+          </div>
+        </header>
+        <main className={styles.mainContent}>
+          <div className={styles.infoSide}>
+            <h2 className={styles.title}>Accommodation Management, Reimagined.</h2>
+            <p className={styles.description}>The all-in-one platform for compliance, tracking, and data-driven insights.</p>
+            <div className={styles.featuresGrid}>
+              <div className={styles.feature}><div className={styles.featureIconContainer}><BookCheck className={styles.featureIcon} /></div><div><h3 className={styles.featureTitle}>For Teachers & Admins</h3><p className={styles.featureDescription}>Acknowledge, track, and document accommodations.</p></div></div>
+              <div className={styles.feature}><div className={styles.featureIconContainer}><BarChart className={styles.featureIcon} /></div><div><h3 className={styles.featureTitle}>Compliance & Reporting</h3><p className={styles.featureDescription}>Oversee compliance and manage school-wide data.</p></div></div>
+              <div className={styles.feature}><div className={styles.featureIconContainer}><ShieldCheck className={styles.featureIcon} /></div><div><h3 className={styles.featureTitle}>Secure & Compliant</h3><p className={styles.featureDescription}>Built with security in mind to protect student data.</p></div></div>
+            </div>
+          </div>
+          <div className={styles.formSide}><LoginForm /></div>
+        </main>
+      </div>
     </div>
   );
 }

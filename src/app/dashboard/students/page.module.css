@@ -1,0 +1,12 @@
+.pageHeader { margin-bottom: 2rem; }
+.title { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+.subtitle { font-size: 1rem; color: #9ca3af; }
+.tableContainer { background-color: #1f2937; border-radius: 0.5rem; overflow: hidden; border: 1px solid #374151; }
+.table { width: 100%; border-collapse: collapse; }
+.table th, .table td { padding: 1rem 1.5rem; text-align: left; }
+.table th { background-color: #374151; font-weight: 600; color: #e5e7eb; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; }
+.table tr { border-bottom: 1px solid #374151; }
+.table tr:last-child { border-bottom: none; }
+.table td { color: #d1d5db; }
+.accommodationTag { display: inline-block; background-color: #3730a3; color: #e0e7ff; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.875rem; margin-right: 0.5rem; margin-bottom: 0.5rem; }
+.loading, .error { text-align: center; padding: 4rem; font-size: 1.25rem; color: #9ca3af; }
