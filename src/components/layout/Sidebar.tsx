@@ -2,20 +2,27 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Users, GraduationCap, Settings, Shield } from 'lucide-react';
+import { LayoutDashboard, Users, GraduationCap, Shield } from 'lucide-react'; // Removed 'Settings' icon
 import styles from './Sidebar.module.css';
 import { useAuth } from '@/context/AuthContext';
+
+// Updated: Removed the 'Settings' object from the array
 const navItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, adminOnly: false },
     { href: '/dashboard/classes', label: 'My Classes', icon: Users, adminOnly: false },
     { href: '/dashboard/students', label: 'All Students', icon: GraduationCap, adminOnly: false },
     { href: '/dashboard/admin', label: 'Admin', icon: Shield, adminOnly: true },
-    { href: '/dashboard/settings', label: 'Settings', icon: Settings, adminOnly: false },
 ];
+
 export function Sidebar() {
     const pathname = usePathname();
     const { userProfile } = useAuth();
-    const visibleNavItems = navItems.filter(item => !item.adminOnly || (item.adminOnly && userProfile?.role === 'admin'));
+
+    // The rest of the logic remains the same
+    const visibleNavItems = navItems.filter(item => 
+        !item.adminOnly || (item.adminOnly && userProfile?.role === 'admin')
+    );
+
     return (
         <aside className={styles.sidebar}>
             <div className={styles.logoContainer}>
