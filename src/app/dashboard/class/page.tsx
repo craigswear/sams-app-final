@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { doc, getDoc, collection, query, where, getDocs, documentId } from 'firebase/firestore';
+import { doc, getDoc, collection, query, where, getDocs, documentId } from 'firebase/firestore'; 
 import { firestore as db } from '@/lib/firebase';
 import { useAuth } from '@/context/AuthContext';
 import { TeacherClass, Student } from '@/types';
@@ -12,6 +12,7 @@ function ClassDetailContent() {
     const { user } = useAuth();
     const searchParams = useSearchParams();
     const classId = searchParams.get('id');
+
     const [classDetails, setClassDetails] = useState<TeacherClass | null>(null);
     const [roster, setRoster] = useState<Student[]>([]);
     const [loading, setLoading] = useState(true);
@@ -24,11 +25,13 @@ function ClassDetailContent() {
                 try {
                     const classDocRef = doc(db, 'teacherClasses', classId);
                     const classDocSnap = await getDoc(classDocRef);
+
                     if (!classDocSnap.exists()) {
                         setError("Class not found.");
                     } else {
                         const classData = { id: classDocSnap.id, ...classDocSnap.data() } as TeacherClass;
                         setClassDetails(classData);
+
                         if (classData.studentIds && classData.studentIds.length > 0) {
                             const studentsCollectionRef = collection(db, 'students');
                             const q = query(studentsCollectionRef, where(documentId(), 'in', classData.studentIds));
@@ -67,7 +70,7 @@ function ClassDetailContent() {
                <table className={styles.table}>
                     <thead>
                         <tr>
-                            <th>Name</th>
+                            <th>Student Name</th>
                             <th>Student ID</th>
                             <th>Accommodations on File</th>
                         </tr>
@@ -77,7 +80,7 @@ function ClassDetailContent() {
                             roster.map((student) => (
                                 <tr key={student.id}>
                                     <td>
-                                        <Link href={`/dashboard/student?id=${student.id}&classId=${classId}`}>
+                                        <Link href={`/dashboard/student?id=${student.id}&classId=${classId}`} className={styles.studentNameLink}>
                                             {student.firstName} {student.lastName}
                                         </Link>
                                     </td>
