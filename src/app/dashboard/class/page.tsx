@@ -1,96 +1,93 @@
 'use client';
-import { useEffect, useState, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { doc, getDoc, collection, query, where, getDocs, documentId } from 'firebase/firestore'; 
+
+import { useEffect, useState, useCallback, Suspense } from 'react';
+import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
 import { firestore as db } from '@/lib/firebase';
-import { useAuth } from '@/context/AuthContext';
-import { TeacherClass, Student } from '@/types';
+import { useSearchParams } from 'next/navigation';
+import { Student } from '@/types';
 import styles from './page.module.css';
 import Link from 'next/link';
 
 function ClassDetailContent() {
-    const { user } = useAuth();
     const searchParams = useSearchParams();
     const classId = searchParams.get('id');
 
-    const [classDetails, setClassDetails] = useState<TeacherClass | null>(null);
-    const [roster, setRoster] = useState<Student[]>([]);
+    const [className, setClassName] = useState('');
+    const [students, setStudents] = useState<Student[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        if (user && classId) {
-            const fetchClassAndRoster = async () => {
-                setLoading(true);
-                try {
-                    const classDocRef = doc(db, 'teacherClasses', classId);
-                    const classDocSnap = await getDoc(classDocRef);
+    const fetchClassDetails = useCallback(async () => {
+        if (!classId) {
+            setError("No class specified.");
+            setLoading(false);
+            return;
+        }
 
-                    if (!classDocSnap.exists()) {
-                        setError("Class not found.");
-                    } else {
-                        const classData = { id: classDocSnap.id, ...classDocSnap.data() } as TeacherClass;
-                        setClassDetails(classData);
+        setLoading(true);
+        try {
+            const classDocRef = doc(db, 'teacherClasses', classId);
+            const classDocSnap = await getDoc(classDocRef);
 
-                        if (classData.studentIds && classData.studentIds.length > 0) {
-                            const studentsCollectionRef = collection(db, 'students');
-                            const q = query(studentsCollectionRef, where(documentId(), 'in', classData.studentIds));
-                            const rosterSnapshot = await getDocs(q);
-                            const rosterList = rosterSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Student));
-                            setRoster(rosterList);
-                        }
-                    }
-                } catch (err) {
-                    console.error("Error fetching class details:", err);
-                    setError("Failed to load class data.");
-                } finally {
-                    setLoading(false);
-                }
-            };
-            fetchClassAndRoster();
-        } else if (!classId) {
-            setError("No class ID provided.");
+            if (!classDocSnap.exists()) {
+                throw new Error("Class not found.");
+            }
+            const classData = classDocSnap.data();
+            setClassName(classData.name);
+
+            const studentIds = classData.studentIds as string[];
+            if (studentIds.length > 0) {
+                const studentsQuery = query(collection(db, 'students'), where('__name__', 'in', studentIds));
+                const studentsSnapshot = await getDocs(studentsQuery);
+                const studentsList = studentsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Student));
+                setStudents(studentsList);
+            } else {
+                setStudents([]);
+            }
+
+        } catch (err) {
+            console.error("Error fetching class details:", err);
+            setError("Failed to load class details.");
+        } finally {
             setLoading(false);
         }
-    }, [user, classId]);
+    }, [classId]);
+
+    useEffect(() => {
+        fetchClassDetails();
+    }, [fetchClassDetails]);
 
     if (loading) return <div className={styles.loading}>Loading Class Roster...</div>;
     if (error) return <div className={styles.error}>{error}</div>;
 
     return (
         <div>
-            <header className={styles.pageHeader}>
-                <p className={styles.breadcrumb}>
-                    <Link href="/dashboard/classes">My Classes</Link> / {classDetails?.name}
-                </p>
-                <h1 className={styles.title}>{classDetails?.name || 'Class Details'}</h1>
-                <p className={styles.subtitle}>Student Roster</p>
+            <header className={styles.header}>
+                <Link href="/dashboard" className={styles.backLink}>&larr; Back to My Classes</Link>
+                <h1>{className}</h1>
+                <p>Student Roster</p>
             </header>
             <div className={styles.tableContainer}>
-               <table className={styles.table}>
+                <table className={styles.table}>
                     <thead>
                         <tr>
-                            <th>Student Name</th>
+                            <th>Name</th>
                             <th>Student ID</th>
-                            <th>Accommodations on File</th>
+                            <th>Accommodations</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {roster.length > 0 ? (
-                            roster.map((student) => (
-                                <tr key={student.id}>
-                                    <td>
-                                        <Link href={`/dashboard/student?id=${student.id}&classId=${classId}`} className={styles.studentNameLink}>
-                                            {student.firstName} {student.lastName}
-                                        </Link>
-                                    </td>
-                                    <td>{student.studentId}</td>
-                                    <td>{student.accommodations.length}</td>
-                                </tr>
-                            ))
-                        ) : (
+                        {students.length > 0 ? students.map((student) => (
+                            <tr key={student.id}>
+                                <td>{student.firstName} {student.lastName}</td>
+                                <td>{student.studentId}</td>
+                                <td>
+                                    {student.accommodations?.map(acc => acc.name).join(', ') || 'None'}
+                                </td>
+                            </tr>
+                        )) : (
                             <tr>
-                                <td colSpan={3} style={{ textAlign: 'center' }}>This class has no students yet.</td>
+                                <td colSpan={3} style={{textAlign: 'center'}}>This class has no students.</td>
                             </tr>
                         )}
                     </tbody>
@@ -100,7 +97,7 @@ function ClassDetailContent() {
     );
 }
 
-export default function ClassDetailPage() {
+export default function ClassDetailsPage() {
     return (
         <Suspense fallback={<div className={styles.loading}>Loading...</div>}>
             <ClassDetailContent />
