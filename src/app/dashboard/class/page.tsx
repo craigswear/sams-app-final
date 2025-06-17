@@ -123,7 +123,7 @@ export default function ClassPage() {
   return (
     <>
       <main className={styles.mainContent}>
-        <a href="/dashboard/classes" className={styles.backLink}>&larr; Back to My Classes</a>
+        <a href="/dashboard" className={styles.backLink}>&larr; Back to My Classes</a>
         <div className={styles.pageHeader}><h1>Class: Algebra I</h1></div>
 
         <div className={styles.tableContainer}>
@@ -171,7 +171,6 @@ export default function ClassPage() {
                     </tr>
                 </thead>
                 <tbody>
-                  {/* THIS IS THE CORRECTED LINE - a single .map() */}
                   {logEntries.map((entry) => (
                     <tr key={entry.id}>
                       <td>{entry.date}</td>
@@ -236,7 +235,8 @@ export default function ClassPage() {
               <p><strong>Student:</strong> {selectedStudent?.name}</p>
               <p><strong>Accommodations:</strong> {editingLog ? editingLog.logDetails.split(' (')[0] : selectedStudent?.accommodations.join(', ')}</p>
               <div className={styles.formGroup}>
-                <label htmlFor="logNotes">Notes (e.g., "on Quiz 4")</label>
+                {/* THIS IS THE CORRECTED LINE */}
+                <label htmlFor="logNotes">Notes (e.g., &quot;on Quiz 4&quot;)</label>
                 <input type="text" id="logNotes" className={styles.formInput} value={logNotes} onChange={(e) => setLogNotes(e.target.value)}/>
               </div>
               <div className={styles.formGroup}>
