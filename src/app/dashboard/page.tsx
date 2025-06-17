@@ -13,7 +13,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export default function TeacherDashboardPage() {
-    const { user, userProfile, loading: authLoading } = useAuth();
+    const { user, loading: authLoading } = useAuth();
     const router = useRouter();
     const [classes, setClasses] = useState<TeacherClass[]>([]);
     const [pageLoading, setPageLoading] = useState(true);
@@ -43,13 +43,13 @@ export default function TeacherDashboardPage() {
         if (!authLoading) {
             if (!user) {
                 router.push('/');
-            } else if (userProfile?.role === 'admin') {
+            } else if (user?.role === 'admin') {
                 router.push('/dashboard/admin');
             } else {
                 fetchClasses();
             }
         }
-    }, [user, userProfile, authLoading, router, fetchClasses]);
+    }, [user, authLoading, router, fetchClasses]);
 
     const handleEdit = (cls: TeacherClass) => {
         setSelectedClass(cls);
@@ -71,7 +71,7 @@ export default function TeacherDashboardPage() {
     if (error) return <div className={styles.error}>{error}</div>;
 
     // This check ensures we only render the teacher dashboard for teachers
-    if (userProfile?.role !== 'teacher') {
+    if (user?.role !== 'teacher') {
         return <div className={styles.loading}>Redirecting...</div>;
     }
 

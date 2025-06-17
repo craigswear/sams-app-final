@@ -8,7 +8,7 @@ import { useAuth } from '@/context/AuthContext';
 
 export function Sidebar() {
     const pathname = usePathname();
-    const { userProfile } = useAuth();
+    const { user } = useAuth();
 
     // Base navigation items
     const navItems = [
@@ -17,7 +17,7 @@ export function Sidebar() {
     ];
 
     // Filter items based on user role
-    const visibleNavItems = navItems.filter(item => item.role === userProfile?.role);
+    const visibleNavItems = navItems.filter(item => item.role === user?.role);
 
     return (
         <aside className={styles.sidebar}>

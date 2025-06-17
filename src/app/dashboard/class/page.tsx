@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import styles from './page.module.css';
 
-// --- Type Definitions ---
+// Type Definitions
 type Student = {
   id: string;
   name: string;
@@ -21,7 +21,7 @@ type LogEntry = {
   loggedBy: string;
 };
 
-// --- Initial Data ---
+// Initial Data
 const initialStudents: Student[] = [
   { id: '333444', name: 'Jane Smith', accommodations: ['Read Aloud'], isAcknowledged: false },
   { id: '777888', name: 'Mary Williams', accommodations: ['Preferential Seating'], isAcknowledged: false },
@@ -34,7 +34,6 @@ const initialLogEntries: LogEntry[] = [
 ];
 
 export default function ClassPage() {
-  // --- State Management ---
   const [students, setStudents] = useState<Student[]>(initialStudents);
   const [logEntries, setLogEntries] = useState<LogEntry[]>(initialLogEntries);
   
@@ -48,7 +47,6 @@ export default function ClassPage() {
   const [logNotes, setLogNotes] = useState('');
   const [logSignerName, setLogSignerName] = useState('');
 
-  // --- Handlers for Acknowledgment Workflow ---
   const handleOpenAcknowledgeModal = (student: Student) => {
     setSelectedStudent(student);
     setIsAcknowledgeModalOpen(true);
@@ -65,7 +63,6 @@ export default function ClassPage() {
     setAcknowledgmentName('');
   };
 
-  // --- Handlers for Log Usage Workflow ---
   const handleOpenLogUsageModal = (student: Student) => {
     setSelectedStudent(student);
     setEditingLog(null);
@@ -123,8 +120,10 @@ export default function ClassPage() {
   return (
     <>
       <main className={styles.mainContent}>
-        <a href="/dashboard" className={styles.backLink}>&larr; Back to My Classes</a>
-        <div className={styles.pageHeader}><h1>Class: Algebra I</h1></div>
+        {/* The "Back to My Classes" link that was here has been removed */}
+        <div className={styles.pageHeader}>
+            <h1>Class: Algebra I</h1>
+        </div>
 
         <div className={styles.tableContainer}>
             <h2>Student Roster</h2>
@@ -188,7 +187,7 @@ export default function ClassPage() {
         </div>
       </main>
 
-      {/* --- MODALS --- */}
+      {/* Acknowledgment Modal */}
       {isAcknowledgeModalOpen && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>
@@ -224,6 +223,7 @@ export default function ClassPage() {
         </div>
       )}
       
+      {/* Log Usage Modal */}
       {isLogUsageModalOpen && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>
@@ -235,7 +235,6 @@ export default function ClassPage() {
               <p><strong>Student:</strong> {selectedStudent?.name}</p>
               <p><strong>Accommodations:</strong> {editingLog ? editingLog.logDetails.split(' (')[0] : selectedStudent?.accommodations.join(', ')}</p>
               <div className={styles.formGroup}>
-                {/* THIS IS THE CORRECTED LINE */}
                 <label htmlFor="logNotes">Notes (e.g., &quot;on Quiz 4&quot;)</label>
                 <input type="text" id="logNotes" className={styles.formInput} value={logNotes} onChange={(e) => setLogNotes(e.target.value)}/>
               </div>

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Poppins } from "next/font/google"; // I've added your font back
 import "./globals.css";
-import { AuthProvider } from '@/context/AuthContext';
+import { AuthProvider } from '@/context/AuthContext'; // Import the provider
 
 const poppins = Poppins({ subsets: ["latin"], weight: ['400', '500', '600', '700'] });
 
@@ -12,13 +12,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
       <body className={poppins.className}>
-        <AuthProvider>{children}</AuthProvider>
+        {/* The AuthProvider now wraps all of your pages */}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

@@ -12,7 +12,7 @@ import { CreateUserModal } from '@/components/modals/CreateUserModal';
 import EditUserModal from '@/components/modals/EditUserModal'; // Corrected: Use default import
 
 export default function UserManagementPage() {
-    const { userProfile } = useAuth();
+    const { user } = useAuth();
     const router = useRouter();
     const [users, setUsers] = useState<UserProfile[]>([]);
     const [loading, setLoading] = useState(true);
@@ -22,7 +22,7 @@ export default function UserManagementPage() {
     const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null);
 
     const fetchUsers = useCallback(async () => {
-        if (userProfile?.role !== 'admin') { setLoading(false); return; };
+        if (user?.role !== 'admin') { setLoading(false); return; };
         setLoading(true);
         try {
             const usersCollectionRef = collection(db, 'users');
@@ -35,15 +35,15 @@ export default function UserManagementPage() {
         } finally {
             setLoading(false);
         }
-    }, [userProfile]);
+    }, [user]);
 
     useEffect(() => {
-        if (userProfile && userProfile.role !== 'admin') {
+        if (user && user.role !== 'admin') {
             router.push('/dashboard');
-        } else if (userProfile) {
+        } else if (user) {
             fetchUsers();
         }
-    }, [userProfile, router, fetchUsers]);
+    }, [user, router, fetchUsers]);
 
     const handleEdit = (user: UserProfile) => {
         setSelectedUser(user);

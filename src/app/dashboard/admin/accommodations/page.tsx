@@ -11,7 +11,7 @@ import EditAccommodationModal from '@/components/modals/EditAccommodationModal';
 import { PlusCircle, Edit, Trash2 } from 'lucide-react';
 
 export default function ManageAccommodationsPage() {
-    const { userProfile } = useAuth();
+    const { user } = useAuth();
     const [accommodations, setAccommodations] = useState<Accommodation[]>([]);
     const [loading, setLoading] = useState(true);
     const [isAddModalOpen, setAddModalOpen] = useState(false);
@@ -34,10 +34,10 @@ export default function ManageAccommodationsPage() {
     }, []);
 
     useEffect(() => {
-        if (userProfile?.role === 'admin') {
+        if (user?.role === 'admin') {
             fetchAccommodations();
         }
-    }, [userProfile, fetchAccommodations]);
+    }, [user, fetchAccommodations]);
     
     const handleEdit = (acc: Accommodation) => {
         setSelectedAccommodation(acc);

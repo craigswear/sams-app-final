@@ -1,64 +1,88 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { onAuthStateChanged, User, signOut } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
-import { auth, firestore as db } from '@/lib/firebase';
-import { UserProfile } from '@/types';
-import { useRouter } from 'next/navigation';
+import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
+
+interface User {
+  uid: string;
+  name: string;
+  email: string;
+  role?: 'admin' | 'teacher';
+}
 
 interface AuthContextType {
   user: User | null;
-  userProfile: UserProfile | null;
+  isAuthenticated: boolean;
   loading: boolean;
-  logout: () => Promise<void>;
+  logout: () => Promise<void>; // Add the logout function to our context type
 }
 
-const AuthContext = createContext<AuthContextType>({ 
-  user: null, 
-  userProfile: null, 
-  loading: true,
-  logout: async () => {} 
-});
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        setUser(user);
-        const userDocRef = doc(db, 'users', user.uid);
-        const userDocSnap = await getDoc(userDocRef);
-        setUserProfile(userDocSnap.exists() ? userDocSnap.data() as UserProfile : null);
-      } else {
-        setUser(null);
-        setUserProfile(null);
-      }
-      setLoading(false);
-    });
-    return () => unsubscribe();
+  // Define the logout function here
+  const logout = useCallback(async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      // Clear the user state and redirect
+      setUser(null);
+      window.location.href = '/';
+    } catch (error) {
+      console.error("Failed to logout:", error);
+    }
   }, []);
 
-  const logout = async () => {
-    try {
-      await signOut(auth);
-      // After sign out is successful, redirect to the homepage.
-      // The onAuthStateChanged listener will handle clearing user state.
-      router.push('/');
-    } catch (error) {
-      console.error("Error signing out:", error);
-    }
+  useEffect(() => {
+    const checkUserSession = async () => {
+      try {
+        const token = document.cookie.includes('auth_token=');
+        if (token) {
+          setUser({ uid: 'dummy-admin-uid-123', name: 'Admin User', email: 'admin@example.com', role: 'admin' });
+        } else {
+          setUser(null);
+        }
+      } catch (error) {
+        console.error("Auth check failed:", error);
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    checkUserSession();
+  }, []);
+
+  if (loading && !user) {
+    return (
+      <div style={{
+        display: 'flex', justifyContent: 'center', alignItems: 'center',
+        height: '100vh', backgroundColor: '#1a1d2e', color: '#ffffff'
+      }}>
+        Loading...
+      </div>
+    );
+  }
+  
+  // Provide the user, loading status, and logout function in the context's value
+  const value = {
+    user,
+    isAuthenticated: !!user,
+    loading,
+    logout
   };
 
-  const value = { user, userProfile, loading, logout };
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+}

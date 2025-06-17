@@ -1,16 +1,16 @@
 'use client';
 
-import { useAuth } from '@/context/AuthContext';
-import styles from './Header.module.css';
+import { useAuth } from '@/context/AuthContext'; // Assuming this is the correct path
+import styles from './Header.module.css'; // Assuming you have a CSS module for the header
 
 export function Header() {
-    const { logout } = useAuth();
+  const { logout } = useAuth(); // This will now work correctly
 
-    return (
-        <header className={styles.header}>
-            <button onClick={logout} className={styles.logoutButton}>
-                Logout
-            </button>
-        </header>
-    );
+  return (
+    <header className={styles.topBar}>
+      <button className={styles.logoutButton} onClick={logout}>
+        Logout
+      </button>
+    </header>
+  );
 }

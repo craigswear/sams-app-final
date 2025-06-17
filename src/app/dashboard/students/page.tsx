@@ -10,7 +10,7 @@ import { EditStudentModal } from '@/components/modals/EditStudentModal'; // Impo
 import { PlusCircle, Edit, Trash2 } from 'lucide-react';
 
 export default function AllStudentsPage() {
-    const { user, userProfile } = useAuth();
+    const { user, } = useAuth();
     const [students, setStudents] = useState<Student[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -68,7 +68,7 @@ export default function AllStudentsPage() {
                         <h1 className={styles.title}>All Students</h1>
                         <p className={styles.subtitle}>A master list of all students registered in the system.</p>
                     </div>
-                    {userProfile?.role === 'admin' && (
+                    {user?.role === 'admin' && (
                         <button onClick={() => setAddModalOpen(true)} style={{backgroundColor: '#4f46e5', color: 'white', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', fontWeight: 600, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem'}}>
                             <PlusCircle size={20} />
                             Add Student
@@ -82,7 +82,7 @@ export default function AllStudentsPage() {
                                 <th>Name</th>
                                 <th>Student ID</th>
                                 <th>Accommodations</th>
-                                {userProfile?.role === 'admin' && <th>Actions</th>}
+                                {user?.role === 'admin' && <th>Actions</th>}
                             </tr>
                         </thead>
                         <tbody>
@@ -97,7 +97,7 @@ export default function AllStudentsPage() {
                                             ))
                                         ) : (<span>None</span>)}
                                     </td>
-                                    {userProfile?.role === 'admin' && (
+                                    {user?.role === 'admin' && (
                                         <td className={styles.actionsCell}>
                                             <button onClick={() => handleEdit(student)} className={styles.actionButton}><Edit size={14}/></button>
                                             <button onClick={() => handleDelete(student.id)} className={`${styles.actionButton} ${styles.deleteButton}`}><Trash2 size={14}/></button>

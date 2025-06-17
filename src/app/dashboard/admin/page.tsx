@@ -18,20 +18,20 @@ const gridStyle: React.CSSProperties = {
 };
     
 export default function AdminPage() {
-    const { userProfile, loading } = useAuth();
+    const { user, loading } = useAuth();
     const router = useRouter();
 
     useEffect(() => {
-        if (!loading && userProfile?.role !== 'admin') {
+        if (!loading && user?.role !== 'admin') {
             router.push('/dashboard');
         }
-    }, [userProfile, loading, router]);
+    }, [user, loading, router]);
 
-    if (loading || !userProfile) {
+    if (loading || !user) {
         return <div>Verifying permissions...</div>;
     }
 
-    if (userProfile.role === 'admin') {
+    if (user.role === 'admin') {
         return (
             <div>
                 <h1 style={{fontSize: '2rem', fontWeight: 'bold'}}>Admin Dashboard</h1>
