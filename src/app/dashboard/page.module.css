@@ -1,104 +1,94 @@
+.pageWrapper {
+    width: 100%;
+}
+
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
+    color: #ffffff;
 }
-.title {
+
+.header h1 {
     font-size: 2rem;
-    font-weight: 700;
+    margin: 0;
 }
+
 .createButton {
-    background-color: #4f46e5;
-    color: white;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.5rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s;
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    background-color: #4f46e5; /* Adjusted button color to match sidebar */
+    color: #ffffff;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
 }
+
 .createButton:hover {
     background-color: #4338ca;
 }
-.emptyState {
-    border: 2px dashed #374151;
-    border-radius: 0.75rem;
-    padding: 4rem 2rem;
-    text-align: center;
-    color: #9ca3af;
-}
-.emptyState h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #e5e7eb;
-    margin-bottom: 1rem;
-}
-.emptyState p {
-    margin-bottom: 2rem;
-}
-.classesGrid {
+
+.classList {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    /* This creates responsive columns that are a minimum of 320px wide */
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 1.5rem;
 }
+
 .classCard {
-    background-color: #1f2937;
-    border-radius: 0.75rem;
-    padding: 1.5rem;
+    background-color: #2a2f4a;
     border: 1px solid #374151;
-    transition: transform 0.2s, box-shadow 0.2s;
+    border-radius: 12px;
     display: flex;
-    flex-direction: column;
     justify-content: space-between;
+    align-items: center;
+    transition: transform 0.2s ease, border-color 0.2s ease;
 }
+
 .classCard:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.1), 0 4px 6px -4px rgba(79, 70, 229, 0.1);
+    border-color: #4f46e5;
 }
-.cardTitle {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #ffffff;
-    margin-bottom: 0.5rem;
-}
-.cardInfo {
-    font-size: 0.875rem;
-    color: #9ca3af;
+
+.cardLink {
     flex-grow: 1;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: #ffffff;
 }
-.cardActions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 0.5rem;
-    margin-top: 1rem;
-    border-top: 1px solid #374151;
-    padding-top: 1rem;
-}
-.actionButton {
-    background-color: transparent;
-    border: 1px solid #4b5563;
-    color: #9ca3af;
-    padding: 0.25rem 0.5rem;
-    font-size: 0.75rem;
-    border-radius: 0.375rem;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-.actionButton:hover {
-    border-color: #6366f1;
-    color: #6366f1;
-}
-.deleteButton:hover {
-    border-color: #ef4444;
-    color: #ef4444;
-}
-.loading, .error {
-    text-align: center;
-    padding: 4rem;
+
+.cardContent h2 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
     font-size: 1.25rem;
+}
+
+.cardContent p {
+    margin: 0;
+    color: #c0c2d4;
+    font-size: 0.9rem;
+}
+
+.cardActions {
+    padding-right: 1.5rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.iconButton {
+    background: none;
+    border: none;
     color: #9ca3af;
+    cursor: pointer;
+    padding: 0.25rem;
+}
+
+.iconButton:hover {
+    color: #ffffff;
 }

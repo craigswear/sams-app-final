@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image'; // Import the Image component
 import { usePathname } from 'next/navigation';
 import styles from './Sidebar.module.css';
 
@@ -9,7 +10,15 @@ export function Sidebar() {
 
   return (
     <aside className={styles.sidebar}>
-      <div className={styles.sidebarHeader}>SAMS</div>
+      <div className={styles.sidebarHeader}>
+        <Image
+          src="/logo.png" // IMPORTANT: Change to your logo's path in the /public folder
+          alt="SAMS Logo"
+          width={40}
+          height={40}
+        />
+        <span>SAMS</span>
+      </div>
       <nav className={styles.nav}>
         <ul>
           <li>
@@ -23,7 +32,7 @@ export function Sidebar() {
           </li>
           <li>
             <Link
-              href="/dashboard" // This should point to your "My Classes" page URL
+              href="/dashboard"
               className={pathname.startsWith('/dashboard/class') ? styles.active : ''}
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
