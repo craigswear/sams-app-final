@@ -1,43 +1,37 @@
 'use client';
-import Image from 'next/image';
+
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Shield } from 'lucide-react';
 import styles from './Sidebar.module.css';
-import { useAuth } from '@/context/AuthContext';
 
 export function Sidebar() {
-    const pathname = usePathname();
-    const { user } = useAuth();
+  const pathname = usePathname();
 
-    // Base navigation items
-    const navItems = [
-        { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, role: 'teacher' },
-        { href: '/dashboard/admin', label: 'Admin', icon: Shield, role: 'admin' },
-    ];
-
-    // Filter items based on user role
-    const visibleNavItems = navItems.filter(item => item.role === user?.role);
-
-    return (
-        <aside className={styles.sidebar}>
-            <div className={styles.logoContainer}>
-                <Image src="/logo.png" alt="SAMS Logo" width={40} height={40} />
-                <h1 className={styles.logoTitle}>SAMS</h1>
-            </div>
-            <nav>
-                <ul className={styles.navList}>
-                    {/* For teachers, we only show their main dashboard link. Admins see the admin link. */}
-                    {visibleNavItems.map((item) => (
-                        <li key={item.href}>
-                            <Link href={item.href} className={`${styles.navLink} ${pathname.startsWith(item.href) ? styles.navLinkActive : ''}`}>
-                                <item.icon size={20} />
-                                <span>{item.label}</span>
-                            </Link>
-                        </li>
-                    ))}
-                </ul>
-            </nav>
-        </aside>
-    );
+  return (
+    <aside className={styles.sidebar}>
+      <div className={styles.sidebarHeader}>SAMS</div>
+      <nav className={styles.nav}>
+        <ul>
+          <li>
+            <Link 
+              href="/dashboard" 
+              className={pathname === '/dashboard' ? styles.active : ''}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+              <span>Dashboard</span>
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/dashboard" // This should point to your "My Classes" page URL
+              className={pathname.startsWith('/dashboard/class') ? styles.active : ''}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+              <span>My Classes</span>
+            </Link>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+  );
 }
