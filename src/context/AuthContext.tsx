@@ -13,7 +13,7 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   loading: boolean;
-  logout: () => Promise<void>; // Add the logout function to our context type
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -22,11 +22,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Define the logout function here
   const logout = useCallback(async () => {
     try {
       await fetch('/api/auth/logout', { method: 'POST' });
-      // Clear the user state and redirect
+      // NEW: Clear the saved email on logout
+      localStorage.removeItem('user_email');
       setUser(null);
       window.location.href = '/';
     } catch (error) {
@@ -38,11 +38,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const checkUserSession = async () => {
       try {
         const token = document.cookie.includes('auth_token=');
+        
         if (token) {
-          setUser({ uid: 'dummy-admin-uid-123', name: 'Admin User', email: 'admin@example.com', role: 'admin' });
+          // NEW: Read the email from local storage
+          const storedEmail = localStorage.getItem('user_email');
+          
+          // Check if the email suggests an admin role
+          if (storedEmail && storedEmail.includes('admin')) {
+            setUser({ 
+              uid: 'dummy-admin-uid-123', 
+              name: 'Admin User', 
+              email: storedEmail, 
+              role: 'admin' 
+            });
+          } else {
+            // Otherwise, create a teacher user
+            setUser({ 
+              uid: 'dummy-teacher-uid-456', 
+              name: 'Teacher User', 
+              email: storedEmail || 'teacher@example.com', 
+              role: 'teacher' 
+            });
+          }
         } else {
           setUser(null);
         }
+        
       } catch (error) {
         console.error("Auth check failed:", error);
         setUser(null);
@@ -50,27 +71,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setLoading(false);
       }
     };
+
     checkUserSession();
   }, []);
 
   if (loading && !user) {
     return (
-      <div style={{
-        display: 'flex', justifyContent: 'center', alignItems: 'center',
-        height: '100vh', backgroundColor: '#1a1d2e', color: '#ffffff'
-      }}>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: '#1a1d2e', color: '#ffffff' }}>
         Loading...
       </div>
     );
   }
   
-  // Provide the user, loading status, and logout function in the context's value
-  const value = {
-    user,
-    isAuthenticated: !!user,
-    loading,
-    logout
-  };
+  const value = { user, isAuthenticated: !!user, loading, logout };
 
   return (
     <AuthContext.Provider value={value}>

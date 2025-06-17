@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import styles from './page.module.css';
-import { ShieldCheck, BarChart, BookCopy, Info } from 'lucide-react'; // For icons
+import { ShieldCheck, BarChart, BookCopy, Info } from 'lucide-react';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -10,6 +11,11 @@ export default function LoginPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+
+    // THIS IS THE NEW LINE: It saves the email for the AuthProvider to check.
+    localStorage.setItem('user_email', email);
+
+    // The rest of the function remains the same.
     document.cookie = 'auth_token=dummy_token; path=/;';
     window.location.href = '/dashboard';
   };
@@ -19,9 +25,15 @@ export default function LoginPage() {
       <div className={styles.contentWrapper}>
         <header className={styles.header}>
           <div className={styles.logoContainer}>
+            <Image 
+              src="/logo.png"
+              alt="SAMS Logo"
+              width={200}
+              height={200}
+            />
             <div className={styles.logo}>
               <div className={styles.logoTitle}>SAMS</div>
-              <div className={styles.logoTagline}>Educational Solutions</div>
+              <div className={styles.logoTagline}>"The Standard in Educational Solutions"</div>
             </div>
           </div>
           <button className={styles.infoButton}>
@@ -31,7 +43,6 @@ export default function LoginPage() {
         </header>
 
         <main className={styles.mainContent}>
-          {/* Left Side: Information */}
           <div className={styles.infoSide}>
             <h1 className={styles.title}>Accommodation Management, Reimagined.</h1>
             <p className={styles.description}>
@@ -67,8 +78,6 @@ export default function LoginPage() {
               </div>
             </div>
           </div>
-
-          {/* Right Side: Login Form */}
           <div className={styles.formSide}>
             <div className={styles.loginBox}>
               <h2>Welcome Back</h2>
