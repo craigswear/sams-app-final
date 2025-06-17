@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { doc, updateDoc } from 'firebase/firestore';
-import { firestore as db } from '@/lib/firebase';
+import { db } from '@/lib/firebase';
 import { UserProfile, UserRole } from '@/types';
 import styles from './CreateUserModal.module.css'; // We can reuse the same styles
 import { X } from 'lucide-react';

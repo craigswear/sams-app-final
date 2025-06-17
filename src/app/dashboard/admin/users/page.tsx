@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { collection, getDocs, doc, deleteDoc, QueryDocumentSnapshot, DocumentData } from 'firebase/firestore';
-import { firestore as db } from '@/lib/firebase';
+import { db } from '@/lib/firebase';
 import { useAuth } from '@/context/AuthContext';
 import { UserProfile } from '@/types';
 import styles from './page.module.css';

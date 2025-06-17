@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
-import { firestore as db } from '@/lib/firebase';
+import { db } from '@/lib/firebase';
 import styles from './RequestInfoModal.module.css';
 import { X } from 'lucide-react';
 

@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
-import { firestore as db } from '@/lib/firebase';
+import { db } from '@/lib/firebase';
 import { useAuth } from '@/context/AuthContext';
 import { Accommodation, Student } from '@/types';
 import styles from './LogAccommodationModal.module.css';

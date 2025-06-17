@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { collection, getDocs, addDoc, QueryDocumentSnapshot, DocumentData } from 'firebase/firestore';
-import { firestore as db } from '@/lib/firebase';
+import { db } from '@/lib/firebase';
 import { Accommodation } from '@/types';
 import styles from './AddStudentModal.module.css';
 import { X } from 'lucide-react';

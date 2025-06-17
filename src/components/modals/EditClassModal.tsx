@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { collection, getDocs, doc, updateDoc, QueryDocumentSnapshot, DocumentData } from 'firebase/firestore';
-import { firestore as db } from '@/lib/firebase';
+import { db } from '@/lib/firebase';
 import { Student, TeacherClass } from '@/types';
 import styles from './CreateClassModal.module.css';
 import { X } from 'lucide-react';

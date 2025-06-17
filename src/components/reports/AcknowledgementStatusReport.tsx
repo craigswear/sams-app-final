@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
-import { firestore as db } from '@/lib/firebase';
+import { db } from '@/lib/firebase';
 import { Student, UserProfile, TeacherClass } from '@/types';
 import styles from '@/app/dashboard/admin/reports/page.module.css';
 

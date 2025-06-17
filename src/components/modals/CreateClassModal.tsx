@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { collection, getDocs, addDoc, QueryDocumentSnapshot, DocumentData } from 'firebase/firestore';
-import { firestore as db } from '@/lib/firebase';
+import { db } from '@/lib/firebase';
 import { useAuth } from '@/context/AuthContext';
 import { Student } from '@/types';
 import styles from './CreateClassModal.module.css';

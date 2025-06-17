@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useMemo } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
-import { firestore as db } from '@/lib/firebase';
+import { db } from '@/lib/firebase';
 import { AccommodationLog, Student, UserProfile, Accommodation } from '@/types';
 import styles from '@/app/dashboard/admin/reports/page.module.css';
 import { Download } from 'lucide-react';

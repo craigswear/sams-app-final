@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 // Corrected: Removed unused 'QueryDocumentSnapshot' and 'DocumentData'
 import { collection, getDocs, doc, updateDoc } from 'firebase/firestore';
-import { firestore as db } from '@/lib/firebase';
+import { db } from '@/lib/firebase';
 import { Accommodation, Student } from '@/types';
 import styles from './AddStudentModal.module.css'; // Reuse styles
 import { X } from 'lucide-react';
