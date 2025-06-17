@@ -33,7 +33,7 @@ export default function LoginPage() {
             />
             <div className={styles.logo}>
               <div className={styles.logoTitle}>SAMS</div>
-              <div className={styles.logoTagline}>"The Standard in Educational Solutions"</div>
+              <div className={styles.logoTagline}>&quot;The Standard in Educational Solutions&quot;</div>
             </div>
           </div>
           <button className={styles.infoButton}>
