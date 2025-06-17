@@ -1,71 +1,202 @@
-.loading, .error {
-    text-align: center;
-    padding: 4rem;
-    font-size: 1.25rem;
-    color: #9ca3af;
+.root {
+    display: flex;
+    height: 100vh;
+    background-color: #1a1d2e;
+    color: #ffffff;
 }
 
-.error {
-    color: #fca5a5;
+.sidebar {
+    width: 260px; /* Increased sidebar width slightly */
+    background-color: #2a2f4a;
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #4a4f7a;
 }
 
-.header {
-    margin-bottom: 2rem;
-}
-
-.header h1 {
-    font-size: 2rem;
+.sidebarHeader {
+    font-size: 1.5rem;
     font-weight: 700;
+    margin-bottom: 2.5rem;
+    padding-left: 1rem; /* Added some padding for alignment */
 }
 
-.header p {
-    font-size: 1rem;
-    color: #9ca3af;
-    margin-top: 0.25rem;
+.sidebar nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar nav a {
+    display: flex;
+    align-items: center;
+    padding: 0.9rem 1rem;
+    text-decoration: none;
+    color: #c0c2d4;
+    border-radius: 8px;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sidebar nav a.active,
+.sidebar nav a:hover {
+    background-color: #6c63ff;
+    color: #ffffff;
+}
+
+.sidebar nav a svg {
+    margin-right: 1rem;
+    width: 20px;
+    height: 20px;
+}
+
+.logoutButton {
+    margin-top: auto;
+    background-color: #3a3f6a;
+    color: #ffffff;
+    border: none;
+    padding: 0.8rem 1rem; /* Added horizontal padding for consistency */
+    width: calc(100% - 2rem); /* Adjust width for padding */
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+    margin-left: 1rem; /* Added margin for alignment */
+}
+
+.logoutButton:hover {
+    background-color: #5a52d6;
+}
+
+.mainContent {
+    flex-grow: 1;
+    padding: 2rem 3rem;
+    overflow-y: auto;
 }
 
 .backLink {
+    text-decoration: none;
+    color: #c0c2d4;
+    font-weight: 500;
     display: inline-block;
     margin-bottom: 1.5rem;
-    color: #9ca3af;
-    text-decoration: none;
-    font-weight: 500;
 }
 
 .backLink:hover {
-    color: #c7d2fe;
+    color: #6c63ff;
+}
+
+.pageHeader {
+    margin-bottom: 2rem;
+}
+
+.pageHeader h1 {
+    font-size: 2rem;
+    margin: 0;
 }
 
 .tableContainer {
-    background-color: #1f2937;
-    border-radius: 0.5rem;
-    border: 1px solid #374151;
-    overflow-x: auto;
+    background-color: #2a2f4a;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid #4a4f7a;
 }
 
-.table {
+.tableContainer h2 {
+    margin-top: 0;
+    font-size: 1.25rem;
+    color: #ffffff;
+    border-bottom: 1px solid #4a4f7a;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.tableContainer table {
     width: 100%;
     border-collapse: collapse;
-    color: #d1d5db;
 }
 
-.table th,
-.table td {
-    padding: 1rem 1.5rem;
+.tableContainer th,
+.tableContainer td {
+    padding: 1rem 0.5rem;
     text-align: left;
-    border-bottom: 1px solid #374151;
-    white-space: nowrap;
+    border-bottom: 1px solid #4a4f7a;
+    vertical-align: middle;
 }
 
-.table th {
-    background-color: #374151;
-    font-weight: 600;
-    color: #e5e7eb;
-    font-size: 0.75rem;
+.tableContainer thead th {
+    color: #c0c2d4;
+    font-size: 0.8rem;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.5px;
+    font-weight: 600;
 }
 
-.table tr:last-child td {
+.tableContainer tbody tr:last-child td {
     border-bottom: none;
+}
+
+.tableContainer tbody td:last-child {
+    text-align: center; /* Center the action button */
+}
+
+.actionButton {
+    background-color: #6c63ff;
+    color: #ffffff;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+    display: block; /* Make it a block-level element to control width */
+    width: fit-content; /* Adjust width to content */
+    margin: 0 auto; /* Center the button within the cell */
+}
+
+.actionButton:hover {
+    background-color: #5a52d6;
+}
+
+/* Specific column widths (adjust as needed) */
+.tableContainer th:nth-child(1),
+.tableContainer td:nth-child(1) {
+    width: 25%; /* Name */
+}
+
+.tableContainer th:nth-child(2),
+.tableContainer td:nth-child(2) {
+    width: 15%; /* Student ID */
+}
+
+.tableContainer th:nth-child(3),
+.tableContainer td:nth-child(3) {
+    width: 40%; /* Accommodations */
+}
+
+.tableContainer th:nth-child(4),
+.tableContainer td:nth-child(4) {
+    width: 20%; /* Actions */
+}
+
+.tableContainer th:nth-child(1),
+.tableContainer td:nth-child(1) {
+    width: 20%; /* Date (Recent Logs) */
+}
+
+.tableContainer th:nth-child(2),
+.tableContainer td:nth-child(2) {
+    width: 20%; /* Student (Recent Logs) */
+}
+
+.tableContainer th:nth-child(3),
+.tableContainer td:nth-child(3) {
+    width: 40%; /* Accommodation Logged (Recent Logs) */
+}
+
+.tableContainer th:nth-child(4),
+.tableContainer td:nth-child(4) {
+    width: 20%; /* Logged By (Recent Logs) */
 }

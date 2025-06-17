@@ -1,0 +1,75 @@
+.layoutRoot {
+    display: flex;
+    height: 100vh;
+    background-color: #1a1d2e;
+    color: #ffffff;
+}
+
+.sidebar {
+    width: 260px;
+    background-color: #2a2f4a;
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #4a4f7a;
+    flex-shrink: 0; /* Prevents the sidebar from shrinking */
+}
+
+.sidebarHeader {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 2.5rem;
+    padding-left: 1rem;
+}
+
+.sidebar nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar nav a {
+    display: flex;
+    align-items: center;
+    padding: 0.9rem 1rem;
+    text-decoration: none;
+    color: #c0c2d4;
+    border-radius: 8px;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sidebar nav a.active,
+.sidebar nav a:hover {
+    background-color: #6c63ff;
+    color: #ffffff;
+}
+
+.sidebar nav a svg {
+    margin-right: 1rem;
+    width: 20px;
+    height: 20px;
+}
+
+.logoutButton {
+    margin-top: auto;
+    background-color: #3a3f6a;
+    color: #ffffff;
+    border: none;
+    padding: 0.8rem;
+    width: 100%;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+.logoutButton:hover {
+    background-color: #5a52d6;
+}
+
+.contentWrapper {
+    flex-grow: 1;
+    overflow-y: auto; /* Allows content to scroll if it's too long */
+}
